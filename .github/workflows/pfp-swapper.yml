@@ -23,7 +23,6 @@ jobs:
       - name: Update PFP
         env:
           AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-          USER_ID: ${{ secrets.USER_ID }}
         run: python main.py
 
       - name: Commit updated frame index
