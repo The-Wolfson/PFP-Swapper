@@ -72,7 +72,7 @@ files = {
 
 # Upload the new profile picture via API
 response = requests.post(config.API_PATH, headers=headers, files=files)
-
+print(config.API_PATH)
 # Check if upload was successful
 if response.status_code == 200:
     print(f"Updated profile photo to Hue {HUE_STEP * next_frame:.2f} (Frame {next_frame})")
