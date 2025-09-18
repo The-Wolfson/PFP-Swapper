@@ -77,7 +77,7 @@ print(config.API_PATH)
 if response.status_code == 200:
     print(f"Updated profile photo to Hue {HUE_STEP * next_frame:.2f} (Frame {next_frame})")
 else:
-    print("Error:", response)
+    print("Error:", response, response.headers, response.text)
 
 # Save current frame number for next execution
 with open(config.FRAME_FILE, "w") as f:
