@@ -8,10 +8,30 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
-    env:
-      AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
-      USER_ID: ${{ secrets.USER_ID }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Run main
-        run: python main.py
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Update Slack profile frame
+        env:
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          USER_ID: ${{ secrets.USER_ID }}
+        run: python set_slack_frame.py
+
+      - name: Commit updated frame index
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add current_frame.txt
+          git commit -m "Update current frame"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
