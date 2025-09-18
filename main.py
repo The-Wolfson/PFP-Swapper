@@ -2,10 +2,11 @@
 from PIL import Image, ImageFile
 import numpy as np
 import colorsys
-import requests
 import os
 import io
 import config
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
 def shift_hue(img: ImageFile.ImageFile, shift: float):
     """
@@ -56,28 +57,18 @@ HUE_STEP = 1.0 / config.NUM_FRAMES
 # Apply hue shift based on current frame position
 shifted_img = shift_hue(img, HUE_STEP * next_frame)
 
-# Prepare HTTP headers for API authentication
-headers = {
-    "Accept": "application/json",
-    "Authorization": f"Bearer {config.AUTH_TOKEN}"
-}
-
 # Convert shifted image to bytes for upload
 img_bytes = io.BytesIO()
 shifted_img.save(img_bytes, format="PNG")
 img_bytes.seek(0)  # Reset buffer position for reading
-files = {
-    "image": ("frame.png", img_bytes, "image/png")
-}
 
-# Upload the new profile picture via API
-response = requests.post(config.API_PATH, headers=headers, files=files)
-print(config.API_PATH)
-# Check if upload was successful
-if response.status_code == 200:
+client = WebClient(token=config.AUTH_TOKEN)
+try:
+    response = client.users_setPhoto(image=img_bytes)
     print(f"Updated profile photo to Hue {HUE_STEP * next_frame:.2f} (Frame {next_frame})")
-else:
-    print("Error:", response, response.headers, response.text)
+except SlackApiError as e:
+    assert e.response["error"]
+    print("Error:", e)
 
 # Save current frame number for next execution
 with open(config.FRAME_FILE, "w") as f:

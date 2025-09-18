@@ -1,3 +1,4 @@
 pillow
 numpy
 requests
+slack_sdk

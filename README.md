@@ -1,5 +1,5 @@
 # PFP Swapper
-A simple python script that integrates with GitHub actions to change the colour of your Mattermost profile picture over the course of a day.
+A simple python script that integrates with GitHub actions to change the colour of your Slack profile picture over the course of a day.
 
 ## Features
 
