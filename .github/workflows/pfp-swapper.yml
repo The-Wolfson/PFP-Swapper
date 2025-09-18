@@ -1,0 +1,17 @@
+name: PFP Swapper
+
+on:
+  # schedule:
+  #   - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+      USER_ID: ${{ secrets.USER_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run main
+        run: python main.py
