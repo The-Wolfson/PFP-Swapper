@@ -24,14 +24,14 @@ jobs:
         env:
           AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
           USER_ID: ${{ secrets.USER_ID }}
-        run: python set_slack_frame.py
+        run: python main.py
 
       - name: Commit updated frame index
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add current_frame.txt
-          git commit -m "Update current frame"
+          git commit -m "Updated pfp"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
