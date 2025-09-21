@@ -2,35 +2,25 @@ name: PFP Swapper
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: '2-59/5 * * * *'
   workflow_dispatch:
 
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v5
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: '3.13'
+          cache: 'pip'
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Update PFP
         env:
+          RUN_NUMBER: ${{ github.run_number }}
           AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
         run: python main.py
-
-      - name: Commit updated frame index
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add current_frame.txt
-          git commit -m "Updated pfp"
-          git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

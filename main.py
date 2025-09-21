@@ -2,7 +2,6 @@
 from PIL import Image, ImageFile
 import numpy as np
 import colorsys
-import os
 import io
 import config
 from slack_sdk import WebClient
@@ -40,14 +39,8 @@ def shift_hue(img: ImageFile.ImageFile, shift: float):
     arr[...,3] = a  # Preserve original alpha channel
     return Image.fromarray(arr)
 
-last_frame = 0
-# Frame tracking: Load the last used frame number from file
-if os.path.exists(config.FRAME_FILE):
-    with open(config.FRAME_FILE, "r") as f:
-        last_frame = int(f.read().strip())
-
 # Calculate next frame in the cycle (wraps back to 0 after NUM_FRAMES)
-next_frame = (last_frame + 1) % config.NUM_FRAMES
+next_frame = config.RUN_NUMBER % config.NUM_FRAMES
 
 # Load the base image that will be hue-shifted
 img: ImageFile.ImageFile = Image.open(config.PATH_TO_IMAGE)
@@ -69,7 +62,3 @@ try:
 except SlackApiError as e:
     assert e.response["error"]
     print("Error:", e)
-
-# Save current frame number for next execution
-with open(config.FRAME_FILE, "w") as f:
-    f.write(str(next_frame))
