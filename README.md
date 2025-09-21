@@ -75,4 +75,4 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 
 ---
 
-Built with love using Swift in Newcastle, Australia
+Built with love using `Python` in Newcastle, Australia
