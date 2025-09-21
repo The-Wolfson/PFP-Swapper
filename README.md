@@ -53,22 +53,15 @@ You can customize the behavior by modifying `config.py`:
 ```
 pfp-swapper/
 ├── main.py                 # Main script that handles image processing and Slack API
-├── config.py              # Configuration settings
-├── requirements.txt       # Python dependencies
-├── pfp.png                # Your base profile picture
+├── config.py               # Configuration settings
+├── requirements.txt        # Python dependencies
+├── pfp.png                 # Your base profile picture
 ├── .github/
 │   └── workflows/
 │       └── pfp-swapper.yml # GitHub Actions workflow
-└── README.md              # This file
+└── README.md               # This file
 ```
 
-## Dependencies
-
-- `pillow` - Image processing
-- `numpy` - Numerical operations for color manipulation
-- `slack_sdk` - Slack API integration
-- `requests` - HTTP requests (dependency of slack_sdk)
-- 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit issues or pull requests.
