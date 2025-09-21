@@ -1,34 +1,78 @@
 # PFP Swapper
-A simple python script that integrates with GitHub actions to change the colour of your Slack profile picture over the course of a day.
 
-## Features
+A Python script that automatically the colour of your profile picture on Slack using GitHub Actions every 5 minutes.
 
-- Cycles through a configurable number of hue-shifted images (`NUM_FRAMES`)
-- Uses a local image (`pfp.png`) as the base profile picture
-- Automatically uploads the modified image to a remote API
-- Tracks frame progression to ensure smooth cycling between color variations
-- Preserves image transparency
+## How It Works
 
-## How it works
+1. Takes a base image (`pfp.png`)
+2. Calculates the current frame based on the GitHub Actions run number
+3. Shifts the hue of the image by the appropriate amount
+4. Uploads the modified image as your new Slack profile picture
 
-1. Loads the last used frame number from `current_frame.txt`.
-2. Calculates the next hue-shifted frame.
-3. Loads the base image and applies a hue shift.
-4. Converts the resulting image to bytes and uploads it via an authenticated API request.
-5. Saves the frame number for the next run.
+## Setup
+
+### Prerequisites
+
+- A Slack workspace where you have permission to change your profile picture
+- A GitHub account
+- A base profile picture image (PNG format recommended)
+
+### Usage
+
+1. **Fork this repository**
+
+2. **Add your profile picture**
+   - Add your base profile picture as `pfp.png` in the root directory
+   - PNG format is recommended
+
+3. **Get your Slack token**
+   - Go to [Slack API](https://api.slack.com/apps)
+   - Create a new app or use an existing one
+   - Navigate to "OAuth & Permissions"
+   - Add the `users.profile:write` scope
+   - Install the app to your workspace
+   - Copy the "User OAuth Token" (starts with `xoxp-`)
+
+4. **Configure GitHub Secrets**
+   - Go to your repository Settings → Secrets and variables → Actions
+   - Add a new secret named `AUTH_TOKEN` with your Slack token as the value
+
+5. **Enable GitHub Actions**
+   - The workflow will automatically start running every 5 minutes
+   - You can also trigger it manually from the Actions tab
 
 ## Configuration
 
-Edit `config.py` to set:
+You can customize the behavior by modifying `config.py`:
 
-- `NUM_FRAMES`: Number of color variations in the cycle
-- `PATH_TO_IMAGE`: Path to your base profile image
-- `AUTH_TOKEN`: Authentication token for the API (can be set in your environment)
-- `USER_ID`: Your user ID for the remote API
-- `API_PATH`: Endpoint for uploading the image
+- `NUM_FRAMES`: Number of hue variations (default: 60)
+- `PATH_TO_IMAGE`: Path to your base image file (default: "pfp.png")
 
-## Usage
+## File Structure
 
-1. Place your base profile picture as `pfp.png` in the project directory.
-2. Set the required environment variables in your GitHub config (`AUTH_TOKEN`, `USER_ID`).
-3. Run the GitHub Actions cron job
+```
+pfp-swapper/
+├── main.py                 # Main script that handles image processing and Slack API
+├── config.py              # Configuration settings
+├── requirements.txt       # Python dependencies
+├── pfp.png                # Your base profile picture
+├── .github/
+│   └── workflows/
+│       └── pfp-swapper.yml # GitHub Actions workflow
+└── README.md              # This file
+```
+
+## Dependencies
+
+- `pillow` - Image processing
+- `numpy` - Numerical operations for color manipulation
+- `slack_sdk` - Slack API integration
+- `requests` - HTTP requests (dependency of slack_sdk)
+- 
+## Contributing
+
+Contributions are welcome! Please feel free to submit issues or pull requests.
+
+---
+
+Built with love using Swift in Newcastle, Australia

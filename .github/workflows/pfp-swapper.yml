@@ -2,25 +2,40 @@ name: PFP Swapper
 
 on:
   schedule:
+    # Runs every 5 minutes
     - cron: '2-59/5 * * * *'
   workflow_dispatch:
 
 jobs:
   run:
     runs-on: ubuntu-latest
+
     steps:
+      # Step 1: Download the repository code to the runner
       - uses: actions/checkout@v5
 
+      # Step 2: Set up Python environment with caching for faster builds
       - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
+          # Cache pip dependencies
           cache: 'pip'
 
+      # Step 3: Install required Python packages
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      # Step 4: Execute the profile picture swapper script
       - name: Update PFP
         env:
+          # Pass GitHub's built-in run number as RUN_NUMBER environment variable
+          # This automatically increments with each workflow execution
+          # Used to cycle through animation frames
           RUN_NUMBER: ${{ github.run_number }}
+
+          # Pass Slack authentication token from GitHub repository secrets
+          # Store your Slack token as a secret named "AUTH_TOKEN" in repo settings
+          # Required scope: users.profile:write
           AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+        # Run the main Python script that performs the hue shift and Slack upload
         run: python main.py
