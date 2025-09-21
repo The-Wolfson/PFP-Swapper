@@ -49,7 +49,6 @@ def shift_hue(img: ImageFile.ImageFile, shift: float):
     h, s, v = np.vectorize(colorsys.rgb_to_hsv)(r/255., g/255., b/255.)
 
     # Shift hue and wrap around using modulo to stay in 0-1 range
-    # This creates a smooth color transition effect
     h = (h + shift) % 1.0
 
     # Convert back to RGB color space with modified hue
